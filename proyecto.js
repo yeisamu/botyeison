@@ -20,6 +20,7 @@ var bot = new builder.UniversalBot(connector,[
      session.userData.cliente=null;
 
         session.send(emoji.get('hand')+' Hola bienvenido al Restaurante tipico colombia '+emoji.get('point_left'));
+        session.send("![Restaurante](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTymx3OB77Qa_TU0Ymb0S-Fa6dKpDf8aIL8miBmeE0zRIXLIdc3Fg)");
         session.beginDialog('/inicio');
     }
 ]);
@@ -52,7 +53,6 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
         function(session, results){
             let reserv = results.response;
             if(reserv=='si' || reserv=='Si' || reserv=='SI' || reserv=='sI'){
-             //session.beginDialog('/preguntarclima');
              session.replaceDialog('/preguntaFecha');
             }else{
                 session.endConversation(`Gracias por utilizar nuestro sistema de reservas`);
@@ -61,7 +61,7 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
         }
         ]);
 
-        bot.dialog('/preguntaFecha',[// primer dialogo se crea dentro del bot
+        bot.dialog('/preguntaFecha',[// 
             
             function(session,results,next){// objeto llamado sesiòn
                 
@@ -73,7 +73,6 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
             },
             function (session,results){
                 if(results.response){
-                    //let sitio = results.response;
                     session.conversationData.fecha = results.response;
                 }
                 session.beginDialog('/preguntanpersonas');
@@ -90,7 +89,6 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
                 },
                 function (session,results){
                     if(results.response){
-                        //let sitio = results.response;
                         session.conversationData.nper = results.response;
                     }
             
