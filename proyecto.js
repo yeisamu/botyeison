@@ -18,7 +18,7 @@ server.post('api/messages', connector.listen());
 var bot = new builder.UniversalBot(connector,[
     function(session){
      session.userData.cliente=null;
-
+        session.send("![Restaurante](https://media.giphy.com/media/C46EeKCUKxU3e/giphy.gif)");
         session.send(emoji.get('hand')+' Hola bienvenido al Restaurante tipico colombia '+emoji.get('point_left'));
         session.send("![Restaurante](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTymx3OB77Qa_TU0Ymb0S-Fa6dKpDf8aIL8miBmeE0zRIXLIdc3Fg)");
         session.beginDialog('/inicio');
@@ -53,8 +53,10 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
         function(session, results){
             let reserv = results.response;
             if(reserv=='si' || reserv=='Si' || reserv=='SI' || reserv=='sI'){
+
              session.replaceDialog('/preguntaFecha');
             }else{
+                session.send("![Restaurante](http://2.bp.blogspot.com/_OT28MOUX-qQ/R-71XQq0oGI/AAAAAAAAAR4/6gRvlDqFXE8/S269/emotic&)");                
                 session.endConversation(`Gracias por utilizar nuestro sistema de reservas`);
                 
             }
@@ -65,7 +67,7 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
             
             function(session,results,next){// objeto llamado sesiòn
                 
-                if(!session.conversationData.fecha){
+                if(!session.userData.fecha){
                     builder.Prompts.text(session,`Por favor confirme la fecha de la reserva ${emoji.get('calendar')}`);
                 }else{
                     next();
@@ -110,12 +112,31 @@ bot.dialog('/inicio',[// primer dialogo se crea dentro del bot
                         session.conversationData.menu = results.response;
                     }
             
+                    session.beginDialog('/preguntaResponsable');
+                }
+            ]);
+            bot.dialog('/preguntaResponsable', [ //método 
+                function(session,results,next){// 
+                    
+                    if(!session.conversationData.reservado){
+                        builder.Prompts.text(session, `A nombre de quien se hará la reserva? ${emoji.get('man')}`);
+                    }else{
+                        next();
+                    }
+                },
+                function (session,results){
+                    if(results.response){
+                        session.conversationData.reservado = results.response;
+                    }
+            
                     session.beginDialog('/mostrarSalida');
                 }
             ]);
             bot.dialog('/mostrarSalida', [ //método preguntar lugar
 
                 function (session, results){
-                     session.send(` Reserva confirmada.. detalles de la reserva : <br/> fecha: ${session.conversationData.fecha} <br/> # personas: ${session.conversationData.nper} <br/> Menú: ${session.conversationData.menu} `)
+                     session.send(` Reserva confirmada.. detalles de la reserva : <br/> Reservado a: ${session.conversationData.reservado} <br/> fecha: ${session.conversationData.fecha} <br/> Cantidad de personas: ${session.conversationData.nper} <br/> Menú: ${session.conversationData.menu} `)
+                     session.send("![Restaurante](http://2.bp.blogspot.com/_OT28MOUX-qQ/R-71XQq0oGI/AAAAAAAAAR4/6gRvlDqFXE8/S269/emotic&)");
+        
                     }
             ]);
